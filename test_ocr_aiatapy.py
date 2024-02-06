@@ -14,7 +14,7 @@ uvicorn main_aiatapy:app --reload --port 8001
 conda env : yolov5
 '''
 
-from fastapi import FastAPI
+# from fastapi import FastAPI
 from pydantic import BaseModel
 import base64
 from PIL import Image
