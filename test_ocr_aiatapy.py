@@ -133,11 +133,12 @@ def aiocr(reader,img_path,iscorrection):
         
     return text_easyocr
 
-if 'reader' not in st.session_state:
-    with st.spinner('load model...'):
-        st.session_state.reader = easyocr.Reader(['th','en'])
+# if 'reader' not in st.session_state:
+#     with st.spinner('load model...'):
+#         st.session_state.reader = easyocr.Reader(['th','en'])
 
-
+with st.spinner('Load model...'):
+    reader = easyocr.Reader(['th','en'])
 
 # reader = easyocr.Reader(['th','en'])
 iscorrection = False
@@ -148,7 +149,7 @@ if img_input:
 
     strat_time = time.time()
     with st.spinner('Wait for it...'):
-        text_ocr = aiocr(st.session_state.reader,img_input,iscorrection)
+        text_ocr = aiocr(reader,img_input,iscorrection)
 
     text_ocr = f'[{round(time.time()-strat_time,2)}sec]{text_ocr}'
 
@@ -164,8 +165,8 @@ else:
         bytes_data = uploaded_file.read()
 
         strat_time = time.time()
-        with st.spinner('Wait for it...'):
-            text_ocr = aiocr(st.session_state.reader,bytes_data,iscorrection)
+        with st.spinner('OCR..Wait for it...'):
+            text_ocr = aiocr(reader,bytes_data,iscorrection)
 
         text_ocr = f'[{round(time.time()-strat_time,2)}sec]{text_ocr}'
         
@@ -204,7 +205,6 @@ else:
 #     import uvicorn
 
 #     uvicorn.run(app, host="127.0.0.1", port=8000)
-
 
 
 
