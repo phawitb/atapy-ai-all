@@ -4,3 +4,4 @@ pytesseract==0.3.8
 Pillow==9.4.0
 easyocr
 pydantic
+pythainlp
