@@ -133,12 +133,12 @@ def aiocr(reader,img_path,iscorrection):
         
     return text_easyocr
 
-# if 'reader' not in st.session_state:
-#     with st.spinner('load model...'):
-#         st.session_state.reader = easyocr.Reader(['th','en'])
-
 with st.spinner('Load model...'):
-    reader = easyocr.Reader(['th','en'])
+    if 'reader' not in st.session_state:
+        with st.spinner('load model...'):
+            st.session_state.reader = easyocr.Reader(['th','en'])
+
+reader = st.session_state.reader
 
 # reader = easyocr.Reader(['th','en'])
 iscorrection = False
