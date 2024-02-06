@@ -11,3 +11,8 @@ aimethod = 0 >> use pyinterect&easyocr
 aimethod = 1 >> use pyinterect&easyocr&wordcorrection  
 
 uvicorn main_aiatapy:app --reload --port 8001  
+
+
+## Streamlit
+test_ocr_aiatapy.py  
+https://atapy-ocr.streamlit.app/  
