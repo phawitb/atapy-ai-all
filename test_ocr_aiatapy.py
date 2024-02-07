@@ -30,7 +30,27 @@ import time
 import streamlit as st
 
 
+def reduce_image_size(byte_data, target_size_kb):
+    # Open the image from byte data
+    image = Image.open(BytesIO(byte_data))
 
+    # Calculate the compression ratio needed to achieve the target size
+    current_size_kb = len(byte_data) / 1024.0
+    compression_ratio = target_size_kb / current_size_kb
+
+    # Reduce the image size
+    new_width = int(image.width * compression_ratio)
+    new_height = int(image.height * compression_ratio)
+    
+    # Use Image.ANTIALIAS as a constant value for antialiasing
+    resized_image = image.resize((new_width, new_height))
+
+    # Save the resized image to a byte buffer
+    output_buffer = BytesIO()
+    resized_image.save(output_buffer, format='JPEG')  # You can change the format as needed (JPEG, PNG, etc.)
+    output_byte_data = output_buffer.getvalue()
+
+    return output_byte_data
 
 # def aiocr(reader,img_path,iscorrection):
 #     def is_base64_image(encoded_text):
@@ -169,6 +189,9 @@ else:
     for uploaded_file in uploaded_files:
         # if uploaded_file:
         bytes_data = uploaded_file.read()
+
+        bytes_data = reduce_image_size(bytes_data, 100)
+
 
         strat_time = time.time()
         with st.spinner('OCR..Wait for it...'):
