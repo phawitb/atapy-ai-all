@@ -200,16 +200,16 @@ app = FastAPI()
 class Ai(BaseModel):
     imgsrc: str
     # aimethod: int = None
-    ocr: bool = True
-    word_correction: bool = False
-    face_recognition: bool = True
+    isocr: bool = True
+    isword_correction: bool = False
+    isface_recognition: bool = True
     resize_img: int = 100
 
 
 @app.post("/aiatapy/")
 async def ai_img(ai: Ai):
 
-    text_ocr,face_recognition = aiocr(reader,fr,ai.imgsrc,ai.ocr,ai.word_correction,ai.face_recognition,ai.resize_img)
+    text_ocr,face_recognition = aiocr(reader,fr,ai.imgsrc,ai.isocr,ai.isword_correction,ai.isface_recognition,ai.resize_img)
 
     return {
         "text_ocr":text_ocr,
