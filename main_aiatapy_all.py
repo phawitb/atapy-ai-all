@@ -180,7 +180,7 @@ def aiocr(reader,fr,img_path,isocr,isword_correction,isface_recognition,resize_i
     return text_easyocr,face_recognition
 
 
-CLASS_DICT_PATH = 'data/train/class_dict.json' 
+CLASS_DICT_PATH = 'class_dict.json' 
 # TEST_IMAGE_FILE = "https://s.isanook.com/fi/0/fp/397/1988417/tagline-template-update-april.jpg"  #"data/train/class2/img1.jpg" #"./Datasets/Test2/"
 MODEL_PATH = "model_v1.pkl"
 CONFIDENCE = 0.7
