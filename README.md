@@ -20,6 +20,8 @@ https://atapy-ocr.streamlit.app/
 
 
 ## Install
+```
 git clone https://github.com/phawitb/atapy-ai-all.git
 pip install -r requirements.txt
 conda install conda-forge::tesseract
+```
