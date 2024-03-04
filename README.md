@@ -29,3 +29,7 @@ git clone https://github.com/phawitb/atapy-ai-all.git
 pip install -r requirements.txt
 conda install conda-forge::tesseract
 ```
+```
+conda env export -n atapy-ai-all -f atapy-ai-all.yml
+```
+
