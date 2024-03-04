@@ -33,7 +33,7 @@ import cv2
 import json
 
 # def aiocr(reader,fr,img_path,aimethod):
-def aiocr(reader,fr,img_path,isocr,isword_correction,isface_recognition,resize_img):
+def aiocr(reader,fr,img_path,isocr,isword_correction,isface_recognition,resize_img,isOnlyBigText):
 
     def resize_image_with_target_size(input_path, output_path, target_size_kb):
         image = cv2.imread(input_path)
@@ -103,10 +103,18 @@ def aiocr(reader,fr,img_path,isocr,isword_correction,isface_recognition,resize_i
         text = pytesseract.image_to_string(im, config=custom_config)
         return text
         
-    def ocr_easyocr(reader,path):
-        result = reader.readtext(path,detail = 0)
-        return '\n'.join(result)
+    def ocr_easyocr(reader,path,isOnlyBigText):
+        def calculate_area(box):
+            return (box[2][0] - box[0][0]) * (box[2][1] - box[0][1])
         
+        if isOnlyBigText == False:
+            result = reader.readtext(path,detail = 0)
+            return '\n'.join(result)
+        else:
+            result = reader.readtext(path)
+            largest_box = max(result, key=lambda x: calculate_area(x[0]))
+            return largest_box[1]
+
     def correction(result):
         result = result.split('\n')
         R = ''
@@ -149,7 +157,7 @@ def aiocr(reader,fr,img_path,isocr,isword_correction,isface_recognition,resize_i
 
         #easyocr
         if text_tesseract:
-            text_easyocr = ocr_easyocr(reader,img_path)
+            text_easyocr = ocr_easyocr(reader,img_path,isOnlyBigText)
             print('text_easyocr',text_easyocr)
 
         easyocr_time = time.time() - start
@@ -204,12 +212,13 @@ class Ai(BaseModel):
     isword_correction: bool = False
     isface_recognition: bool = True
     resize_img: int = 100
+    isOnlyBigText: bool = False
 
 
 @app.post("/aiatapy/")
 async def ai_img(ai: Ai):
 
-    text_ocr,face_recognition = aiocr(reader,fr,ai.imgsrc,ai.isocr,ai.isword_correction,ai.isface_recognition,ai.resize_img)
+    text_ocr,face_recognition = aiocr(reader,fr,ai.imgsrc,ai.isocr,ai.isword_correction,ai.isface_recognition,ai.resize_img,ai.isOnlyBigText)
 
     return {
         "text_ocr":text_ocr,
