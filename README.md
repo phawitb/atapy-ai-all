@@ -11,6 +11,8 @@ Body : {
 }  
 
 uvicorn main_aiatapy_all:app --reload --port 8001    
+uvicorn main_aiatapy_ocr:app --reload --port 8001
+
 
 ## Streamlit  
 test_ocr_aiatapy.py    
