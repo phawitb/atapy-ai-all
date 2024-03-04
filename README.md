@@ -13,7 +13,7 @@ Body : {
   "isface_recognition": 1,
   "isword_correction": 0,
   "resize_img": 150,
-  "isOnlyBigText": 0
+  "isOnlyBigText": 1
 }
 ```
 
