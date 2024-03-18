@@ -33,7 +33,7 @@ import cv2
 import json
 
 # def aiocr(reader,fr,img_path,aimethod):
-def aiocr(reader,fr,img_path,isocr,isword_correction,isface_recognition,resize_img,isOnlyBigText):
+def aiocr(reader,fr,img_path,isocr,isword_correction,isface_recognition,resize_img):
 
     def resize_image_with_target_size(input_path, output_path, target_size_kb):
         image = cv2.imread(input_path)
@@ -103,17 +103,22 @@ def aiocr(reader,fr,img_path,isocr,isword_correction,isface_recognition,resize_i
         text = pytesseract.image_to_string(im, config=custom_config)
         return text
         
-    def ocr_easyocr(reader,path,isOnlyBigText):
+    def ocr_easyocr(reader,path):
         def calculate_area(box):
             return (box[2][0] - box[0][0]) * (box[2][1] - box[0][1])
         
-        if isOnlyBigText == False:
-            result = reader.readtext(path,detail = 0)
-            return '\n'.join(result)
-        else:
-            result = reader.readtext(path)
-            largest_box = max(result, key=lambda x: calculate_area(x[0]))
-            return largest_box[1]
+        result = reader.readtext(path,detail = 0)
+        text_all = '\n'.join(result)
+
+        result = reader.readtext(path)
+        result_text = [x[-2] for x in result]
+        result_box_area = [calculate_area(x[0]) for x in result]
+        result_box_sort_index = [i for i, _ in sorted(enumerate(result_box_area), key=lambda x: x[1], reverse=True)]
+
+        text_list = [x.strip() for x in result_text]
+        text_sort = [result_text[x].strip() for x in result_box_sort_index]
+
+        return text_all,text_list,text_sort
 
     def correction(result):
         result = result.split('\n')
@@ -157,8 +162,10 @@ def aiocr(reader,fr,img_path,isocr,isword_correction,isface_recognition,resize_i
 
         #easyocr
         if text_tesseract:
-            text_easyocr = ocr_easyocr(reader,img_path,isOnlyBigText)
-            print('text_easyocr',text_easyocr)
+            text_all,text_list,text_sort = ocr_easyocr(reader,img_path)
+            print('text_all',text_all)
+            print('text_list',text_list)
+            print('text_sort',text_sort)
 
         easyocr_time = time.time() - start
         start = time.time()
@@ -185,7 +192,7 @@ def aiocr(reader,fr,img_path,isocr,isword_correction,isface_recognition,resize_i
         print('face_recognition_time',face_recognition_time)
         print('face_recognition',face_recognition)
 
-    return text_easyocr,face_recognition
+    return text_all,text_list,text_sort,face_recognition
 
 
 CLASS_DICT_PATH = 'class_dict.json' 
@@ -212,16 +219,18 @@ class Ai(BaseModel):
     isword_correction: bool = False
     isface_recognition: bool = True
     resize_img: int = 100
-    isOnlyBigText: bool = False
+    
 
 
 @app.post("/aiatapy/")
 async def ai_img(ai: Ai):
 
-    text_ocr,face_recognition = aiocr(reader,fr,ai.imgsrc,ai.isocr,ai.isword_correction,ai.isface_recognition,ai.resize_img,ai.isOnlyBigText)
+    text_all,text_list,text_sort,face_recognition = aiocr(reader,fr,ai.imgsrc,ai.isocr,ai.isword_correction,ai.isface_recognition,ai.resize_img)
 
     return {
-        "text_ocr":text_ocr,
+        "text_all":text_all,
+        "text_list":text_list,
+        "text_sort":text_sort,
         'face_recognition':face_recognition
     }
 

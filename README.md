@@ -12,8 +12,34 @@ Body : {
   "isocr": 1,
   "isface_recognition": 1,
   "isword_correction": 0,
-  "resize_img": 150,
-  "isOnlyBigText": 1
+  "resize_img": 150
+}
+
+Response : {
+    "text_all": " amarin\nnews\nไม่หวันไหว ดีลลับ",
+    "text_list": [
+        "amarin",
+        "news",
+        "ไม่หวันไหว ดีลลับ"
+    ],
+    "text_sort": [
+        "ไม่หวันไหว ดีลลับ",
+        "amarin",
+        "news"
+    ],
+    "face_recognition": [
+        {
+            "person": "class3",
+            "confidence": 0.6678149998188019,
+            "box": [
+                457,
+                108,
+                609,
+                292
+            ],
+            "person_name": "รังสิมันต์_โรม"
+        }
+    ]
 }
 ```
 
