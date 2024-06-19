@@ -58,6 +58,15 @@ git clone https://github.com/phawitb/atapy-ai-all.git
 pip install -r requirements.txt
 conda install conda-forge::tesseract
 ```
+
+#### load model from googledrive to model floder
+```
+atapy-ai-all
+|----- model
+        |---....
+
+https://drive.google.com/drive/folders/1DdSEQDscxkoV-2MARvsNNT306M7LtqyP?usp=sharing
+```
 #### conda
 ```
 conda env create -f atapy-ai-all.yml
