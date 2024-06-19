@@ -12,7 +12,8 @@ Body : {
   "isocr": 1,
   "isface_recognition": 1,
   "isword_correction": 0,
-  "resize_img": 150
+  "resize_img": 150,
+  "isageface":1
 }
 
 Response : {
